@@ -1,113 +1,126 @@
-# TEMA 2
+# Interpolations in Matlab/Octave
 --------
 
-# Interpolare Proximală
+# Proximal Interpolation
 -----------------------
 
 Proximal_2x2
 --------------
-Aflu numărul de puncte cu ajutorul parametrului STEP, dat ca parametru
-Imi declar o variabila care ma va ajuta sa parcurg pixelii și sa le asociez exact 
-valoarea vecinului cel mai apropiat
-Astfel, pentru acest caz eu am considerat ca imaginea mea e împărțită în 4 subspații
-(4 pătrate care au aceleși valori).
-De aceea parcurg toți pixelii și ma intreb daca sunt în primul pătrat(stanga sus) 
-sau în celelalte 3 și îi asociez pixelului unul din cele 4 puncte cunoscute
+I find the number of points using the STEP parameter, given as a parameter
+I declare a variable that will help me scroll through the pixels and associate them exactly the value of the nearest neighbor
+
+Thus, for this case I considered that my image is divided into 4 subspaces
+(4 squares that have the same values).
+That's why I go through all the pixels and wonder if I'm in the first square (top left) or in the other 3 and I associate the pixel with one of the 4 known dots
 
 Proximal_2x2RGB
 -------------------
-Extrag cele 3 canale
-Aplic funcția de mai sus pentru acestea
-Concatenez cele 3 canale la o nouă imagine
+I extract the 3 channels
+I apply the above function to them
+I concatenate the 3 channels to a new image
 
 Proximal_coef(Functia auxiliara folosita pentru rotatie)
 -------------------
-Am calculat matricea A la fel ca în enunțul temei
-Am calculat vectorul b
-Și acum trebuie sa rezolv sistemul A*x = b
-Pentru asta ma folosesc de 2 funcții din cadrul temei 1 pentru a calcula inversa lui A
-După ce am aflat-o rezultatul este A^-1 *b
+I calculated the matrix A as in the theme statement
+We calculated the vector b
+And now I have to solve the system A * x = b
+Once I found out the inverse, the result is A ^-1 * b
 
 PR_Inv
 -----------
-Am scris destule detalii chiar in functia data.
-Astfel, Prima data descompun matricea A cu algoritmul descompunerii QR al lui Gramschimdt.
-Dupa ce am aflat matricea ortogonala Q si matricea superior triunghiulara R,
-folosesc o functie care imi calculeaza elementele din matricea inversata prin
-backwardsubstitution. Din proprietatile matricilor de mai sus ajung la formula 
-R * x(i) = Q transpus * e_i (e_i este coloana i din matricea identitate)
-x(i) este coloana din matricea inversata.
-In cazul meu B o sa fie inversa matricei A.
-Deci Q*R * [x1,x2, ..., xn] = In ([e1,e2,e3 ...])
-inmultesc la stanga cu matricea transpusa
-R*x_i = Q^t *e_i si asa fac backwards substitution in matricea superior triunghiulara.
-Algoritmul l-am luat din laborator si l-am implementat intr-o functie conform formulei.
-In functie am scris cine este fiecare :
-% rezolvarea unui sistem superior triunghiular
-% U-matricea superior triunghiulara
-% b este partea dreapta a ecuatiei
-% n - dimensiunea matricei 
-% x - vectorul solutie 
+I wrote enough details/comments in the given function.
+Thus, I first decompose the matrix A with Gramschimdt's QR decomposition algorithm.
+After finding the orthogonal matrix Q and the upper triangular matrix R,
+I use a function that calculates the elements in my inverted matrix by
+backwardsubstitution. 
+
+From the properties of the matrices above I come to the formula
+R * x (i) = Q transposed * e_i (e_i is the column i in the identity matrix)
+
+x (i) is the column in the inverted matrix.
+
+In my case B will be the inverse of the matrix A.
+
+So Q * R * [x1, x2, ..., xn] = In ([e1, e2, e3 ...]) multiply to the left with the transposed matrix
+
+R * x_i = Q ^ t * e_i
+
+and so do backwards substitution in the upper triangular matrix.
+
+I took the algorithm from the lab and implemented it in a function according to the formula.
+
+Depending on who I wrote, everyone is:
+
+% solving a triangular upper system \
+% U-triangular upper matrix \
+% b is the right side of the equation \
+% n - matrix size \
+% x - solution vector \
 % U x = b
 
 Proximal_Resize
 ---------------
-Calculez factorii de scalare în funcție de dimensiunile date ca parametru. 
-Deoarece încep parcurgerea de la 0, coeficientul nu va fi sx va fi q-1/n-1
-Am definit de la început inversa matricei de transformare,știind ca aceasta este una diagonală
-Parcurg fiecare pixel, aplic transformarea inversa asupra celor 2 indici 
-și pun în matricea rezultat în sistemul de coordonate 1,n
+I calculate the scaling factors according to the dimensions given as a parameter.
+Since they start scrolling from 0, the coefficient sx will be q-1 / n-1
+We defined the inverse of the transformation matrix from the beginning, knowing that it is a diagonal one
+
+I go through each pixel, I apply the inverse transformation on the 2 indices
+and put in the resulting matrix in the coordinate system 1, n
 Proximal_ResizeRGB
-La fel ca toate funcțiile de tipul acesta, extrag cele 3 canale
-Aplic funcția pentru fiecare din acestea și apoi le concatenez la imaginea finală
+Like all such functions, I extract the 3 channels
+I apply the function to each of them and then concatenate them to the final image
 
 Proximal_rotate
 ---------------
-Calculez cosinus si sinus de rotation_angle
-Calculez matricea de transformare și inversa acesteia(observ că e de fapt matricea transpusă)
-Parcurg fiecare pixel din imagine și iarăși aplic transformata acestor 2 indici pentru a afla xp si yp din imaginea initiala
-Aflu cele 4 puncte care inconjoara xp,yp din imaginea initiala
-Ma intreb daca nu cumva am iesit din spatiul imaginii si calculez coeficientii cu ajutorul fuctiei auxiliare 
-Calculez valoarea interpolata a pixelului cu ajutorul formulei 
-a0 + a1x + a2y + a3xy si aproximez pentru a iesi solutia exacta
+Calculate cosine and sine of rotation_angle
+I calculate the transformation matrix and its inverse (I notice that it is actually the transposed matrix)
+
+I go through each pixel in the image and again I apply the transformed to these 2 indices to find out xp and yp from the initial image
+Find the 4 dots surrounding xp, yp in the original image
+
+I wonder if I somehow got out of the image space and calculate the coefficients with the help of the auxiliary function
+Calculate the interpolated value of the pixel using the formula
+a0 + a1x + a2y + a3xy and approximate to find the exact solution
 
 Proximal_rotateRGB
 ------------------
-Aceeasi procedura ca in cazul functiilor de acest tip
+Same procedure as in the functions of this type
 
 # Interpolare Bicubică
 ----------------------
 
 Bicubic_coef
 -------------
-Calculez matricea de derivate cu ajutorul matricilor primite ca parametru si coeficientilor
-conform enuntului din tema
-De asemenea stiu ca imaginea este reprezentata cu y,(pozitiile in aceasta ordine)
-Calculez matricile cu care o sa inmultesc la stanga si la dreapta pe cea precedenta 
-pentru a rezulta coeficientii
-Toate matricile mele sunt convertite la double
+I calculate the derivative matrix using the matrices received as a parameter and the coefficients
+according to the statement in the topic
+
+I also know that the image is represented by y, (positions in this order)
+I calculate the matrices with which I will multiply on the left and on the right the previous one
+to result in coefficients
+All my matrices are converted to "double"
 
 Precalc_d
 -------------
-Cu ajutorul celor 3 functii care imi aproximeaza derivata in functie de x,y,xy calculez matricile de derivate pentru toti pixelii din imagine
-La fel cum am precizat mai sus(y e indicile care reprezinta linia in imagine,invers fata 
-de cum eram obisnuit)
-Doar aplic functiile create pentru fiecare matrice de derivate dar totodata atrag atentia la limitele in care am voie sa calculez aceste derivate
-Astfel, pentru matricea Ix derivatele pe prima si ultima coloana raman 0
-Pentru Iy, prima si ultima linie raman 0
-Pentru Ixy, ambele linii si coloane raman 0
+With the help of the 3 functions that approximate my derivative according to x, y, xy I calculate the matrix of derivatives for all the pixels in the image
+As I mentioned above (y is the index that represents the line in the image, vice versa
+as I was used to)
+
+I only apply the functions created for each derivative matrix but at the same time I draw attention to the limits within which I am allowed to calculate these derivatives.
+Thus, for the matrix Ix the derivatives on the first and last column remain 0
+For Iy, the first and last line remain 0
+For Ixy, both rows and columns remain 0
 
 Bicubic_resize
 ------------------
-La fel ca in cazul algoritmului proximal, calculez factorii de scalare si inversa transformarii
-Aplic transformarea inversa asupra celor 2 indici si calculez xp,yp din imaginea initiala
-Gasesc cele 4 puncte care inconjoara pixelii xp,yp
-si vad daca nu cumva punctele sunt cele de frontiera
-Calculez coeficientii de interpolare
-Trec coordonatele in patratul unitate
-apoi calculez valoarea proximala in aceste puncte
-Am calculat valoarea prin cele 2 sume de coeficienti si indici din patratul unitate
+As with the proximal algorithm, I calculate the scaling factors and the inverse of the transformation
+I apply the inverse transformation on the 2 indices and calculate xp, yp from the initial image
+I find the 4 dots that surround the pixels xp, yp
+and I see if the points are not the border points
+
+I calculate the interpolation coefficients
+Enter the coordinates in the unit square then calculate the approximate value at these points
+We calculated the value by the 2 sums of coefficients and indices from the unit square
 
 Bicubic_resizeRGB
 ------------------
-Aceeasi procedura ca in cazul functiilor de acest tip
+Same procedure as for such functions
